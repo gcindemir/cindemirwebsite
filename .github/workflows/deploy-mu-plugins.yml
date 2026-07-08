@@ -1,0 +1,38 @@
+name: Deploy mu-plugins to production
+
+on:
+  push:
+    branches: [master]
+    paths:
+      - 'wp-content/mu-plugins/**'
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Deploy mu-plugins via SFTP
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.SFTP_HOST }}
+          username: ${{ secrets.SFTP_USER }}
+          password: ${{ secrets.SFTP_PASSWORD }}
+          port: ${{ secrets.SFTP_PORT }}
+          protocol: sftp
+          local-dir: wp-content/mu-plugins/
+          server-dir: ${{ secrets.SFTP_REMOTE_PATH }}/wp-content/mu-plugins/
+          dangerous-clean-slate: false
+          exclude: |
+            **/.git*
+            **/.git*/**
+            **/node_modules/**
+
+      - name: Purge WP Rocket cache
+        if: ${{ secrets.WP_ROCKET_PURGE_URL != '' }}
+        run: |
+          curl -fsSL -X POST "${{ secrets.WP_ROCKET_PURGE_URL }}" \
+            -H "User-Agent: cindemirwebsite-deploy" \
+            || echo "Cache purge request failed (non-fatal)"
