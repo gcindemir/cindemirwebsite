@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Cindemir Mobile Experience
  * Description: Ensures cindemir.av.tr renders as a proper mobile site (viewport, navigation, layout).
- * Version: 1.0.0
+ * Version: 1.0.1
  * Author: Cindemir Hukuk Bürosu
  */
 
@@ -184,7 +184,7 @@ function cindemir_mobile_styles(): void {
 }
 CSS;
 
-	wp_register_style( 'cindemir-mobile', false, array(), '1.0.0' );
+	wp_register_style( 'cindemir-mobile', false, array(), '1.0.1' );
 	wp_enqueue_style( 'cindemir-mobile' );
 	wp_add_inline_style( 'cindemir-mobile', $css );
 }
@@ -221,7 +221,7 @@ function cindemir_mobile_menu_script(): void {
 })();
 JS;
 
-	wp_register_script( 'cindemir-mobile-menu', '', array(), '1.0.0', true );
+	wp_register_script( 'cindemir-mobile-menu', '', array(), '1.0.1', true );
 	wp_enqueue_script( 'cindemir-mobile-menu' );
 	wp_add_inline_script( 'cindemir-mobile-menu', $js );
 }
