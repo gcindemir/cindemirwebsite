@@ -20,7 +20,7 @@ jobs:
           server: ${{ secrets.SFTP_HOST }}
           username: ${{ secrets.SFTP_USER }}
           password: ${{ secrets.SFTP_PASSWORD }}
-          port: ${{ secrets.SFTP_PORT }}
+          port: 22
           protocol: sftp
           local-dir: wp-content/mu-plugins/
           server-dir: ${{ secrets.SFTP_REMOTE_PATH }}/wp-content/mu-plugins/
@@ -31,8 +31,9 @@ jobs:
             **/node_modules/**
 
       - name: Purge WP Rocket cache
-        if: ${{ secrets.WP_ROCKET_PURGE_URL != '' }}
+        env:
+          PURGE_URL: ${{ secrets.WP_ROCKET_PURGE_URL }}
         run: |
-          curl -fsSL -X POST "${{ secrets.WP_ROCKET_PURGE_URL }}" \
-            -H "User-Agent: cindemirwebsite-deploy" \
-            || echo "Cache purge request failed (non-fatal)"
+          if [ -n "$PURGE_URL" ]; then
+            curl -fsSL -X POST "$PURGE_URL" -H "User-Agent: cindemirwebsite-deploy" || true
+          fi
