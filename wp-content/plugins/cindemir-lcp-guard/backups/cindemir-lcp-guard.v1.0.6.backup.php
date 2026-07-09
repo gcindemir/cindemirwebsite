@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Cindemir LCP Guard
  * Description: Performance and mobile layout fixes for cindemir.av.tr.
- * Version: 1.0.7
+ * Version: 1.0.6
  * Author: Cindemir Hukuk Bürosu
  */
 
@@ -14,27 +14,21 @@ function cindemir_mobile_viewport_meta(): void {
 add_action( 'wp_head', 'cindemir_mobile_viewport_meta', 0 );
 
 function cindemir_mobile_head_assets(): void {
-	echo "<!-- cindemir-mobile v1.0.7 -->\n";
+	echo "<!-- cindemir-mobile v1.0.6 -->\n";
 
 	$css = <<<'CSS'
 @media (max-width: 767px) {
 	html, body { overflow-x: hidden; max-width: 100%; }
 	body header.menu-wrapper,
 	body header.menu-wrapper.fixed {
-		position: sticky !important;
-		top: 0 !important;
+		position: relative !important;
+		top: auto !important;
 		left: auto !important;
 		right: auto !important;
 		width: 100% !important;
 		height: auto !important;
 		min-height: 0 !important;
 		z-index: 1001 !important;
-		background: rgba(46, 95, 95, 0.97) !important;
-		box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
-	}
-	body.admin-bar header.menu-wrapper,
-	body.admin-bar header.menu-wrapper.fixed {
-		top: 46px !important;
 	}
 	body header.menu-wrapper .nav-bar-wrapper { position: relative; min-height: 52px; }
 	body header.menu-wrapper .nav-bar-wrapper .container {
@@ -59,17 +53,20 @@ function cindemir_mobile_head_assets(): void {
 		display: block !important;
 		width: 100%;
 		clear: both;
-		position: relative !important;
+		position: static !important;
 	}
 	header.menu-wrapper .navbar-header {
-		position: absolute !important;
+		position: fixed !important;
 		top: 8px !important;
 		right: 10px !important;
 		width: auto !important;
 		float: none !important;
 		padding: 0 !important;
 		text-align: right !important;
-		z-index: 1003;
+		z-index: 1010;
+	}
+	body.admin-bar header.menu-wrapper .navbar-header {
+		top: 54px !important;
 	}
 	header.menu-wrapper .navbar-toggle {
 		display: inline-flex !important;
@@ -104,20 +101,21 @@ function cindemir_mobile_head_assets(): void {
 	body header.menu-wrapper .res-menu .navbar-collapse.show,
 	body header.menu-wrapper .res-menu .navbar-collapse.cindemir-open {
 		display: block !important;
-		position: absolute !important;
-		top: 100% !important;
-		left: 0 !important;
-		right: 0 !important;
-		z-index: 1002 !important;
+		position: fixed !important;
+		top: 62px !important;
+		left: 10px !important;
+		right: 10px !important;
+		z-index: 1009 !important;
 		margin: 0 !important;
 		height: auto !important;
-		max-height: calc(100vh - 72px) !important;
+		max-height: calc(100vh - 82px) !important;
 		transition: none !important;
 	}
 	body.admin-bar header.menu-wrapper .res-menu .navbar-collapse.in,
 	body.admin-bar header.menu-wrapper .res-menu .navbar-collapse.show,
 	body.admin-bar header.menu-wrapper .res-menu .navbar-collapse.cindemir-open {
-		max-height: calc(100vh - 118px) !important;
+		top: 108px !important;
+		max-height: calc(100vh - 128px) !important;
 	}
 	body header.menu-wrapper .res-menu .navbar-collapse.collapsing {
 		display: none !important;
@@ -184,7 +182,7 @@ CSS;
 (function(){'use strict';function init(){if(window.matchMedia('(min-width:768px)').matches)return;var h=document.querySelector('header.menu-wrapper');if(!h)return;var t=h.querySelector('.navbar-toggle'),c=h.querySelector('.res-menu .navbar-collapse');if(!t||!c)return;if(t.getAttribute('data-cindemir-bound')==='1')return;t.setAttribute('data-cindemir-bound','1');t.removeAttribute('data-toggle');t.removeAttribute('data-target');if(window.jQuery&&window.jQuery.fn&&window.jQuery.fn.collapse){window.jQuery(c).off('.bs.collapse.data-api');window.jQuery(t).off('click.bs.collapse.data-api');}function open(){return c.classList.contains('cindemir-open');}function set(o){c.classList.remove('collapsing');c.classList.toggle('in',o);c.classList.toggle('show',o);c.classList.toggle('cindemir-open',o);t.setAttribute('aria-expanded',o?'true':'false');}t.setAttribute('aria-controls','cindemir-mobile-nav');c.id='cindemir-mobile-nav';set(false);t.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();e.stopImmediatePropagation();set(!open());},true);c.querySelectorAll('a').forEach(function(l){l.addEventListener('click',function(){if(!l.classList.contains('dropdown-toggle'))set(false);});});document.addEventListener('click',function(e){if(!h.contains(e.target))set(false);});window.addEventListener('resize',function(){if(window.matchMedia('(min-width:768px)').matches)set(false);});var hero=document.querySelector('.elementor-element-8873fd6');if(hero){hero.style.setProperty('padding-bottom','120px','important');}}if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();})();
 JS;
 
-	echo '<style id="cindemir-mobile-fix-css-v107">' . $css . '</style>' . "\n";
-	echo '<script id="cindemir-mobile-fix-js-v107" data-no-optimize="1">' . $js . '</script>' . "\n";
+	echo '<style id="cindemir-mobile-fix-css-v105">' . $css . '</style>' . "\n";
+	echo '<script id="cindemir-mobile-fix-js-v105" data-no-optimize="1">' . $js . '</script>' . "\n";
 }
 add_action( 'wp_head', 'cindemir_mobile_head_assets', 1 );
