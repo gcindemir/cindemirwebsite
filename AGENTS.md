@@ -44,6 +44,17 @@ This repository defines no lint/test/build tooling (no `composer.json`,
 file use `php -l <file>`. Manage the site with WP-CLI, e.g. `wp plugin list
 --allow-root`, `wp post list --allow-root`.
 
+### Gotcha: `cindemir-lcp-guard` and `cindemir-mobile` are duplicates
+
+`wp-content/mu-plugins/cindemir-mobile.php` (auto-loaded, must-use) and
+`wp-content/plugins/cindemir-lcp-guard/cindemir-lcp-guard.php` declare the same
+functions (`cindemir_mobile_viewport_meta`, `cindemir_mobile_head_assets`).
+Because the mu-plugin always loads first, activating `cindemir-lcp-guard`
+triggers a fatal `Cannot redeclare ...` error. Locally, leave
+`cindemir-lcp-guard` **inactive**; the mu-plugin already provides the mobile
+viewport/CSS/JS injection (look for the `<!-- cindemir-mobile v1.0.5 -->` marker
+in the page `<head>`).
+
 ### Gotcha: `.gitignore` does not ignore WordPress core
 
 The root `.gitignore` intends to ignore everything except tracked `wp-content`
