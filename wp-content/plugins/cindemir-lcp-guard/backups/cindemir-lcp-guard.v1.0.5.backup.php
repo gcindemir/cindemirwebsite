@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Cindemir LCP Guard
  * Description: Performance and mobile layout fixes for cindemir.av.tr.
- * Version: 1.0.6
+ * Version: 1.0.5
  * Author: Cindemir Hukuk Bürosu
  */
 
@@ -14,7 +14,7 @@ function cindemir_mobile_viewport_meta(): void {
 add_action( 'wp_head', 'cindemir_mobile_viewport_meta', 0 );
 
 function cindemir_mobile_head_assets(): void {
-	echo "<!-- cindemir-mobile v1.0.6 -->\n";
+	echo "<!-- cindemir-mobile v1.0.5 -->\n";
 
 	$css = <<<'CSS'
 @media (max-width: 767px) {
@@ -56,17 +56,14 @@ function cindemir_mobile_head_assets(): void {
 		position: static !important;
 	}
 	header.menu-wrapper .navbar-header {
-		position: fixed !important;
+		position: absolute !important;
 		top: 8px !important;
 		right: 10px !important;
 		width: auto !important;
 		float: none !important;
 		padding: 0 !important;
 		text-align: right !important;
-		z-index: 1010;
-	}
-	body.admin-bar header.menu-wrapper .navbar-header {
-		top: 54px !important;
+		z-index: 1003;
 	}
 	header.menu-wrapper .navbar-toggle {
 		display: inline-flex !important;
@@ -101,21 +98,14 @@ function cindemir_mobile_head_assets(): void {
 	body header.menu-wrapper .res-menu .navbar-collapse.show,
 	body header.menu-wrapper .res-menu .navbar-collapse.cindemir-open {
 		display: block !important;
-		position: fixed !important;
-		top: 62px !important;
-		left: 10px !important;
-		right: 10px !important;
-		z-index: 1009 !important;
+		position: absolute !important;
+		top: 100% !important;
+		left: 0 !important;
+		right: 0 !important;
+		z-index: 1002 !important;
 		margin: 0 !important;
 		height: auto !important;
-		max-height: calc(100vh - 82px) !important;
 		transition: none !important;
-	}
-	body.admin-bar header.menu-wrapper .res-menu .navbar-collapse.in,
-	body.admin-bar header.menu-wrapper .res-menu .navbar-collapse.show,
-	body.admin-bar header.menu-wrapper .res-menu .navbar-collapse.cindemir-open {
-		top: 108px !important;
-		max-height: calc(100vh - 128px) !important;
 	}
 	body header.menu-wrapper .res-menu .navbar-collapse.collapsing {
 		display: none !important;
