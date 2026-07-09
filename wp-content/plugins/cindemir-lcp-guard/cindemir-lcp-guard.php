@@ -1,7 +1,7 @@
 <?php
 /**
- * Plugin Name: Cindemir Mobile Experience
- * Description: Ensures cindemir.av.tr renders as a proper mobile site (viewport, navigation, layout).
+ * Plugin Name: Cindemir LCP Guard
+ * Description: Performance and mobile layout fixes for cindemir.av.tr.
  * Version: 1.0.5
  * Author: Cindemir Hukuk Bürosu
  */
