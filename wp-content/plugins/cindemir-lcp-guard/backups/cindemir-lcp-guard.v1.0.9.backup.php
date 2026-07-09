@@ -8,13 +8,6 @@
 
 defined( 'ABSPATH' ) || exit;
 
-function cindemir_footer_badge_map(): array {
-	return array(
-		'İstanbul Barosu'          => 'https://istanbulbarosu.org.tr/_next/image?url=%2Fimages%2Fbaro_logo.png&w=128&q=75',
-		'Türkiye Barolar Birliği'  => 'https://d.barobirlik.org.tr/amblem/tbb_amblem_60.png',
-	);
-}
-
 function cindemir_lang_flag_map(): array {
 	return array(
 		'tr' => 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAALCAMAAABBPP0LAAAARVBMVEX+AAD3AADwAAD+fHz9cHH7ZGT9WVn6UFDpAAD9oKD5Q0P5OTn2MzP1Kir7ubr65ub1Gxv69PTzDw/kAAD319ffAAD4iooXHQ3FAAAAYklEQVR4AT3HhW0EQRQD0Oc/KG3/dQYEYTg2O+4IQbTHydWt0fw2Sfz8Fuw51+U3On7a6/pc/as1UZLDyuq13lWOwpdPn3+v7XJiDD3DR1N87Qr5WXX9zyQ9opEIOwkmDgr/ZXASmpFRqe0AAAAASUVORK5CYII=',
@@ -30,7 +23,7 @@ function cindemir_mobile_viewport_meta(): void {
 add_action( 'wp_head', 'cindemir_mobile_viewport_meta', 0 );
 
 function cindemir_mobile_head_assets(): void {
-	echo "<!-- cindemir-mobile v1.0.10 -->\n";
+	echo "<!-- cindemir-mobile v1.0.9 -->\n";
 
 	$css = <<<'CSS'
 .lang-item img,
@@ -55,20 +48,6 @@ function cindemir_mobile_head_assets(): void {
 	display: inline-flex !important;
 	align-items: center !important;
 	gap: 8px !important;
-}
-#footer img[alt="İstanbul Barosu"],
-#footer img[alt="Türkiye Barolar Birliği"],
-#footer a[href*="istanbulbarosu"] img,
-#footer a[href*="barobirlik"] img {
-	display: block !important;
-	visibility: visible !important;
-	opacity: 1 !important;
-	width: auto !important;
-	height: 48px !important;
-	max-width: 140px !important;
-	min-width: 0 !important;
-	min-height: 0 !important;
-	object-fit: contain !important;
 }
 @media (max-width: 767px) {
 	html, body { overflow-x: hidden; max-width: 100%; }
@@ -258,37 +237,32 @@ function cindemir_mobile_head_assets(): void {
 }
 CSS;
 
-	echo '<style id="cindemir-mobile-fix-css-v110">' . $css . '</style>' . "\n";
+	echo '<style id="cindemir-mobile-fix-css-v109">' . $css . '</style>' . "\n";
 }
 add_action( 'wp_head', 'cindemir_mobile_head_assets', 999 );
 
 function cindemir_mobile_footer_scripts(): void {
-	$flags_json  = wp_json_encode( cindemir_lang_flag_map() );
-	$badges_json = wp_json_encode( cindemir_footer_badge_map() );
-	$js          = <<<JS
+	$flags_json = wp_json_encode( cindemir_lang_flag_map() );
+	$js         = <<<JS
 (function(){'use strict';
 var FLAGS={$flags_json};
-var BADGES={$badges_json};
 function langCode(li){if(!li)return null;if(li.classList.contains('pll-parent-menu-item')){var l=(document.documentElement.lang||'tr').toLowerCase();return l.split('-')[0];}var m=li.className.match(/lang-item-([a-z]{2})/);return m?m[1]:null;}
 function broken(img){if(!img||!img.src)return true;return img.src.indexOf('svg+xml')>=0&&img.src.indexOf('viewBox')>=0&&img.src.length<120;}
-function restoreImg(img,src){if(!img||!src||!broken(img))return;img.src=src;img.removeAttribute('data-lazy-src');img.setAttribute('loading','eager');img.setAttribute('data-no-lazy','1');}
-function fixImg(img,code){if(!img)return;var src=FLAGS[code]||'';if(!src){var ns=img.parentElement&&img.parentElement.querySelector('noscript img');if(ns&&ns.getAttribute('src'))src=ns.getAttribute('src');}restoreImg(img,src);}
+function fixImg(img,code){if(!img)return;var src=FLAGS[code]||'';if(!src){var ns=img.parentElement&&img.parentElement.querySelector('noscript img');if(ns&&ns.getAttribute('src'))src=ns.getAttribute('src');}if(!src||!broken(img))return;img.src=src;img.removeAttribute('data-lazy-src');img.setAttribute('loading','eager');img.setAttribute('data-no-lazy','1');}
 function initFlags(){document.querySelectorAll('.pll-parent-menu-item,.lang-item').forEach(function(li){fixImg(li.querySelector('a img'),langCode(li));});}
-function initFooterBadges(){document.querySelectorAll('#footer img').forEach(function(img){var alt=img.getAttribute('alt')||'';var src=img.getAttribute('data-lazy-src')||BADGES[alt]||'';if(!src&&img.parentElement){var ns=img.parentElement.querySelector('noscript img');if(ns&&ns.getAttribute('src'))src=ns.getAttribute('src');}restoreImg(img,src);});}
 function initMobileNav(){if(window.matchMedia('(min-width:768px)').matches)return;var h=document.querySelector('header.menu-wrapper');if(!h)return;var t=h.querySelector('.navbar-toggle'),c=h.querySelector('.res-menu .navbar-collapse');if(!t||!c)return;if(t.getAttribute('data-cindemir-bound')==='1')return;t.setAttribute('data-cindemir-bound','1');t.removeAttribute('data-toggle');t.removeAttribute('data-target');if(window.jQuery&&window.jQuery.fn&&window.jQuery.fn.collapse){window.jQuery(c).off('.bs.collapse.data-api');window.jQuery(t).off('click.bs.collapse.data-api');}function open(){return c.classList.contains('cindemir-open');}function set(o){c.classList.remove('collapsing');c.classList.toggle('in',o);c.classList.toggle('show',o);c.classList.toggle('cindemir-open',o);t.setAttribute('aria-expanded',o?'true':'false');}t.setAttribute('aria-controls','cindemir-mobile-nav');c.id='cindemir-mobile-nav';set(false);t.addEventListener('click',function(e){e.preventDefault();e.stopPropagation();e.stopImmediatePropagation();set(!open());},true);c.querySelectorAll('a').forEach(function(l){l.addEventListener('click',function(){if(!l.classList.contains('dropdown-toggle'))set(false);});});document.addEventListener('click',function(e){if(!h.contains(e.target))set(false);});window.addEventListener('resize',function(){if(window.matchMedia('(min-width:768px)').matches)set(false);});var hero=document.querySelector('.elementor-element-8873fd6');if(hero){hero.style.setProperty('padding-bottom','120px','important');}}
-function init(){initFlags();initFooterBadges();initMobileNav();}
+function init(){initFlags();initMobileNav();}
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
 })();
 JS;
 
-	echo '<script type="text/javascript" id="cindemir-mobile-fix-js-v110" data-no-optimize="1" data-cfasync="false" data-no-defer="1" data-no-minify="1">' . $js . '</script>' . "\n";
+	echo '<script type="text/javascript" id="cindemir-mobile-fix-js-v109" data-no-optimize="1" data-cfasync="false" data-no-defer="1" data-no-minify="1">' . $js . '</script>' . "\n";
 }
 add_action( 'wp_footer', 'cindemir_mobile_footer_scripts', 999 );
 
 function cindemir_rocket_exclude_js( array $excluded ): array {
-	$excluded[] = 'cindemir-mobile-fix-js-v110';
+	$excluded[] = 'cindemir-mobile-fix-js-v109';
 	$excluded[] = 'FLAGS';
-	$excluded[] = 'BADGES';
 	return $excluded;
 }
 add_filter( 'rocket_exclude_js', 'cindemir_rocket_exclude_js' );
