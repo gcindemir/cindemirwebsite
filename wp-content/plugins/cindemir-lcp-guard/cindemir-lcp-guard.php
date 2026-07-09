@@ -187,4 +187,4 @@ JS;
 	echo '<style id="cindemir-mobile-fix-css-v107">' . $css . '</style>' . "\n";
 	echo '<script id="cindemir-mobile-fix-js-v107" data-no-optimize="1">' . $js . '</script>' . "\n";
 }
-add_action( 'wp_head', 'cindemir_mobile_head_assets', 1 );
+add_action( 'wp_head', 'cindemir_mobile_head_assets', 999 );
